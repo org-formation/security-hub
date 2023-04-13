@@ -1,0 +1,52 @@
+Parameters:
+  <<: !Include "../../organization-parameters.yml"
+  
+
+OrganizationsDelegate:
+  Type: update-stacks
+  Template: ./organizations-delegate.yml
+  StackName: config-organizations-delegate
+  StackDescription: !Sub "200-aws-config: Delegates administration for AWS Config to account ${SecurityAccount}"
+  Parameters:
+    delegatedAccount: !Ref SecurityAccount
+  DefaultOrganizationBindingRegion: us-east-1
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+
+AwsConfig:
+  Type: update-stacks
+  Template: ./aws-config.yml
+  StackName: aws-config
+  StackDescription: !Sub "200-aws-config: Sets up the AWS config service in account ${SecurityAccount}"
+  TerminationProtection: false
+  DefaultOrganizationBindingRegion: !Ref allRegions
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+    Account: '*'
+  OrganizationBindings:
+    LogArchiveBinding:
+      Account: !Ref LogArchiveAccount
+      Region: !Ref primaryRegion
+  Parameters:
+    bucketName: !Sub 'aws-config-${SecurityAccount}'
+    primaryRegion: !Ref primaryRegion
+
+AwsConfigAggregator:
+  Type: update-stacks
+  Template: ./aws-config-aggregator.yml
+  StackName: aws-config-aggregator
+  StackDescription: !Sub "200-aws-config: AWS Config Aggregator in account ${SecurityAccount}, this allows you to use SQL to query AWS resources data across accounts and regions"
+  DefaultOrganizationBindingRegion: us-east-1
+  OrganizationBindings:
+    ConfigMasterBinding:
+      Account: !Ref SecurityAccount
+    ConfigAllBinding:
+      Account: "*"
+      IncludeMasterAccount: true
+    ConfigMemberBinding:
+      Account: "*"
+      IncludeMasterAccount: true
+      ExcludeAccount: !Ref SecurityAccount
+      Region: !Ref allRegions
+  Parameters:
+    primaryRegion: !Ref primaryRegion

@@ -1,0 +1,12 @@
+
+OrganizationTypes:
+  Type: include
+  Path: organizations.yml
+
+SecurityHubTypes:
+  Type: include
+  Path: security-hub.yml
+
+SecureDefaultTypes:
+  Type: include
+  Path: secure-defaults.yml

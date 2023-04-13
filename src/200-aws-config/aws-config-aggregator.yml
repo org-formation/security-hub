@@ -1,0 +1,23 @@
+
+Parameters:
+  primaryRegion:
+    Type: String
+
+Resources:
+  ConfigAggregator:
+    Type: AWS::Config::ConfigurationAggregator
+    OrganizationBinding: !Ref ConfigMasterBinding
+    Properties:
+      ConfigurationAggregatorName: organization-aggregator
+      AccountAggregationSources:
+        - AccountIds: Fn::EnumTargetAccounts ConfigAllBinding ${account}
+          AwsRegions: 
+            - Fn::EnumTargetRegions ConfigAllBinding ${region}
+
+  AggregationAuthorization:
+    Type: AWS::Config::AggregationAuthorization
+    OrganizationBinding: !Ref ConfigMemberBinding
+    DependsOnAccount: !Ref SecurityAccount
+    Properties:
+      AuthorizedAccountId: !Ref SecurityAccount
+      AuthorizedAwsRegion: !Ref primaryRegion

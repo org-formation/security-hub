@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  delegatedAccount:
+    Type: String
+
+Resources:
+
+  CloudTrailServiceAccess:
+    Type: Community::Organizations::EnableAWSServiceAccess
+    Properties:
+      ServicePrincipal: cloudtrail.amazonaws.com
+      ResourceId: cloudtrail
+
+  CloudTrailDelegatedAdmin:
+    Type: Community::Organizations::DelegatedAdmin
+    DependsOn: CloudTrailServiceAccess
+    Properties:
+      ServicePrincipal: cloudtrail.amazonaws.com
+      AccountId: !Ref delegatedAccount

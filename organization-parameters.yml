@@ -1,0 +1,85 @@
+
+
+###################
+#### Organization Structure
+###################
+
+securityAccountId:
+  Type: String
+  Default: "123412341234"
+
+logArchiveAccountId:
+  Type: String
+  Default: "123412341234"
+
+primaryRegion:
+  Type: String
+  Default: us-east-1
+
+allRegions:
+  Type: String
+  Default:
+    - us-east-1
+    - eu-central-1
+
+nonPrimaryRegions:
+  Type: String
+  Default:
+    - eu-central-1
+
+###################
+#### Security Hub Configuration
+###################
+
+
+
+###################
+#### Account Contact Details
+###################
+OperationsContactName:
+  Type: String
+  Default: "${AWSAccount.AccountName} Operations Team"
+
+OperationsContactEmail:
+  Type: String
+  Default: operations@yourcompany.com
+
+OperationsContactTitle:
+  Type: String
+  Default: Operations Team
+
+OperationsContactPhoneNumber:
+  Type: String
+  Default: +123 123 123 123
+
+BillingContactName:
+  Type: String
+  Default: "${AWSAccount.AccountName} Billing Team"
+
+BillingContactEmail:
+  Type: String
+  Default: billing@yourcompany.com
+
+BillingContactTitle:
+  Type: String
+  Default: Billing Team
+
+BillingContactPhoneNumber:
+  Type: String
+  Default: +123 123 123 123
+
+SecurityContactName:
+  Type: String
+  Default: "${AWSAccount.AccountName} Security Team"
+
+SecurityContactEmail:
+  Type: String
+  Default: Security@yourcompany.com
+
+SecurityContactTitle:
+  Type: String
+  Default: Security Team
+
+SecurityContactPhoneNumber:
+  Type: String
+  Default: +123 123 123 123

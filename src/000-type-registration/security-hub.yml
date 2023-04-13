@@ -1,0 +1,58 @@
+Parameters:
+  <<: !Include "../../organization-parameters.yml"
+  
+#####
+## Community Security Hub Types
+#####
+
+CommunityStandardsControl:
+  Type: register-type
+  SchemaHandlerPackage: s3://community-resource-provider-catalog/community-securityhub-standardscontrol-0.2.5.zip
+  ResourceType: 'Community::SecurityHub::StandardsControl'
+  MaxConcurrentTasks: 500
+  OrganizationBinding:
+    Region: !Ref allRegions
+    Account: "*"
+    IncludeMasterAccount: true
+
+# the standards control allows you to specify which standards to enable
+SecurityHubStandards:
+  Type: register-type
+  SchemaHandlerPackage: s3://community-resource-provider-catalog/community-securityhub-standards-0.1.4.zip
+  ResourceType: 'Community::SecurityHub::Standards'
+  MaxConcurrentTasks: 500
+  OrganizationBinding:
+    Region: !Ref allRegions
+    Account: "*"
+    IncludeMasterAccount: true
+
+# the regular SecurityHub::Hub resource will enable CIS 1.2, if you want to automatically enable CIS1.4 this becomes a problem. this resource fixes that.
+SecurityHubHub:
+  Type: register-type
+  SchemaHandlerPackage: s3://community-resource-provider-catalog/community-securityhub-hub-0.1.3.zip
+  ResourceType: 'Community::SecurityHub::Hub'
+  MaxConcurrentTasks: 500
+  OrganizationBinding:
+    Region: !Ref allRegions
+    Account: "*"
+    IncludeMasterAccount: true
+
+SecurityHubFindingAggregation:
+  Type: register-type
+  SchemaHandlerPackage: s3://community-resource-provider-catalog/community-securityhub-findingaggregation-0.1.1.zip
+  ResourceType: 'Community::SecurityHub::FindingAggregation'
+  MaxConcurrentTasks: 500
+  OrganizationBinding:
+    Region: !Ref primaryRegion
+    Account: "*"
+    IncludeMasterAccount: true
+
+SecurityHubMemberInsight:
+  Type: register-type
+  SchemaHandlerPackage: s3://community-resource-provider-catalog/community-securityhub-insight-0.1.2.zip
+  ResourceType: 'Community::SecurityHub::Insight'
+  MaxConcurrentTasks: 500
+  OrganizationBinding:
+    Region: !Ref allRegions
+    Account: "*"
+    IncludeMasterAccount: true

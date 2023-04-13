@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  delegatedAccount:
+    Type: String
+
+Resources:
+
+  AwsConfigServiceAccess:
+    Type: Community::Organizations::EnableAWSServiceAccess
+    Properties:
+      ServicePrincipal: config.amazonaws.com
+      ResourceId: config
+
+  AwsConfigDelegatedAdmin:
+    Type: Community::Organizations::DelegatedAdmin
+    DependsOn: AwsConfigServiceAccess
+    Properties:
+      ServicePrincipal: config.amazonaws.com
+      AccountId: !Ref delegatedAccount
+
+  AwsConfigMultiAccountServiceAccess:
+    Type: Community::Organizations::EnableAWSServiceAccess
+    DependsOn: AwsConfigDelegatedAdmin
+    Properties:
+      ServicePrincipal: config-multiaccountsetup.amazonaws.com
+      ResourceId: config-multiaccountsetup
+
+  AwsConfigMultiAccountDelegatedAdmin:
+    Type: Community::Organizations::DelegatedAdmin
+    DependsOn: AwsConfigMultiAccountServiceAccess
+    Properties:
+      ServicePrincipal: config-multiaccountsetup.amazonaws.com
+      AccountId: !Ref delegatedAccount

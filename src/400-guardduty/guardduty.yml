@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: "2010-09-09-OC"
+DefaultOrganizationBindingRegion: us-east-1
+
+Resources:
+
+  Detector:
+    Type: AWS::GuardDuty::Detector
+    OrganizationBinding: !Ref GuardDutyAllBinding
+    Properties:
+      Enable: true
+      FindingPublishingFrequency: FIFTEEN_MINUTES
+
+  Master:
+    DependsOnAccount: !Ref SecurityAccount
+    Type: AWS::GuardDuty::Master
+    OrganizationBinding: !Ref GuardDutyMemberBinding
+    Properties:
+      DetectorId: !Ref Detector
+      MasterId: !Ref SecurityAccount
+
+  # be aware that changing the logicalName for a AWS::GuardDuty::Master resource
+  # might result in an error. workaround is to remove the resource and then add it.
+  Member:
+    Type: AWS::GuardDuty::Member
+    OrganizationBinding: !Ref GuardDutyMasterBinding
+    ForeachAccount: !Ref GuardDutyMemberBinding
+    Properties:
+      DetectorId: !Ref Detector
+      Email: !GetAtt CurrentAccount.RootEmail
+      MemberId: !Ref CurrentAccount
+      Status: Invited
+      DisableEmailNotification: true

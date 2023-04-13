@@ -1,0 +1,27 @@
+Parameters:
+  <<: !Include "../../organization-parameters.yml"
+  
+OrganizationsDelegate:
+  Type: update-stacks
+  Template: ./organizations-delegate.yml
+  StackName: cloudtrail-organizations-delegate
+  StackDescription: !Sub "100-cloudtrail: Delegates administration for CloudTrail to account ${SecurityAccount}"
+  Parameters:
+    delegatedAccount: !Ref SecurityAccount
+  DefaultOrganizationBindingRegion: us-east-1
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+
+GlobalCloudtrail:
+  Type: update-stacks
+  Template: global-cloudtrail.yml
+  StackName: global-cloudtrail
+  StackDescription: "100-cloudtrail: organization wide multi-region cloudtrail."
+  DefaultOrganizationBindingRegion: us-east-1
+  DefaultOrganizationBinding:
+    Account: !Ref SecurityAccount
+  OrganizationBindings:
+    LogArchiveBinding:
+      Account: !Ref LogArchiveAccount
+  Parameters:
+    bucketName: !Sub 'cloudtrail-${LogArchiveAccount}'

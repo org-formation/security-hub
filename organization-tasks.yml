@@ -1,0 +1,32 @@
+Parameters:
+  <<: !Include "./organization-parameters.yml"
+
+AnnotateOrganization:
+  Type: annotate-organization
+  DefaultOrganizationAccessRoleName: OrganizationAccountAccessRole
+  # ExcludeAccounts: ["112233445566", "223344556677"], accounts that are excluded will not be modified
+  AccountMapping:
+    SecurityAccount: !Ref securityAccountId
+    LogArchiveAccount: !Ref logArchiveAccountId
+
+TypeRegistrations:
+  Type: include
+  MaxConcurrentTasks: 10
+  Path: src/000-type-registration/organization-tasks.yml
+
+CloudTrail:
+  Type: include
+  Path: src/100-cloudtrail/organization-tasks.yml
+
+AwsConfig:
+  Type: include
+  Path: src/200-aws-config/organization-tasks.yml
+
+SecurityHub:
+  DependsOn: [TypeRegistrations, AwsConfig]
+  Type: include
+  Path: src/300-security-hub/organization-tasks.yml
+
+GuardDuty:
+  Type: include
+  Path: src/400-guardduty/organization-tasks.yml

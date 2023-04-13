@@ -1,0 +1,33 @@
+Parameters:
+  <<: !Include "../../organization-parameters.yml"
+
+OrganizationsDelegate:
+  Type: update-stacks
+  Template: ./organizations-delegate.yml
+  StackName: guardduty-organizations-delegate
+  StackDescription: !Sub "400-guardduty: Delegates administration for GuardDuty to account ${SecurityAccount}"
+  Parameters:
+    delegatedAccount: !Ref SecurityAccount
+  DefaultOrganizationBindingRegion: us-east-1
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+
+GuardDuty:
+  Type: update-stacks
+  Template: ./guardduty.yml
+  DependsOn: OrganizationsDelegate
+  StackName: guardduty
+  DefaultOrganizationBindingRegion: us-east-1
+  OrganizationBindings:
+    GuardDutyAllBinding:
+      Account: '*'
+      IncludeMasterAccount: true
+      Region: !Ref allRegions
+    GuardDutyMemberBinding:
+      IncludeMasterAccount: true
+      Account: '*'
+      ExcludeAccount: !Ref SecurityAccount
+      Region: !Ref allRegions
+    GuardDutyMasterBinding:
+      Account: !Ref SecurityAccount
+      Region: !Ref allRegions

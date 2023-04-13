@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  delegatedAccount:
+    Type: String
+
+Resources:
+
+  SecurityHubEnableOrgAccess:
+    Type: Community::Organizations::EnableAWSServiceAccess
+    Properties:
+      ServicePrincipal: securityhub.amazonaws.com
+      ResourceId: securityhub
+
+  SecurityHubDelegatedAdmin:
+    Type: Community::Organizations::DelegatedAdmin
+    DependsOn: SecurityHubEnableOrgAccess
+    Properties:
+      ServicePrincipal: securityhub.amazonaws.com
+      AccountId: !Ref delegatedAccount

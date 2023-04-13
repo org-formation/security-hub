@@ -1,0 +1,124 @@
+AWSTemplateFormatVersion: "2010-09-09-OC"
+
+# Any Binding that does not explicitly specify a region will default to this.
+# Value can be either string or list
+DefaultOrganizationBindingRegion: us-east-1
+
+Parameters:
+
+  bucketName:
+    Type: String
+    Description: 'Name of the central S3 bucket used to store CloudTrail data'
+
+  trailName:
+    Type: String
+    Description: 'Name of the cloudtrail'
+    Default: organizational-trail
+
+Resources:
+
+  CloudTrailBucket:
+    OrganizationBinding: !Ref LogArchiveBinding
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Ref bucketName
+      AccessControl: BucketOwnerFullControl
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+  CloudTrailBucketPolicy:
+    OrganizationBinding: !Ref LogArchiveBinding
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref CloudTrailBucket
+      PolicyDocument: # based on: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/create-s3-bucket-policy-for-cloudtrail.html
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AWSCloudTrailAclCheck20150319
+            Effect: Allow
+            Principal:
+              Service:
+                - cloudtrail.amazonaws.com
+            Action: s3:GetBucketAcl
+            Resource: !GetAtt CloudTrailBucket.Arn
+          - Sid: AWSCloudTrailWrite20150319
+            Effect: Allow
+            Principal:
+              Service:
+                - cloudtrail.amazonaws.com
+            Action: 
+              - s3:PutObject
+            Resource: !Sub '${CloudTrailBucket.Arn}/AWSLogs/*/*'
+            Condition:
+              StringEquals:
+                's3:x-amz-acl': 'bucket-owner-full-control'
+          - Sid: AllowSSLRequestsOnly
+            Action: s3:*
+            Effect: Deny
+            Resource:
+              - Fn::Sub: ${CloudTrailBucket.Arn}/*
+            Condition:
+              Bool:
+                aws:SecureTransport: "false"
+            Principal: "*"
+
+  GlobalCloudtrail:
+    Type: AWS::CloudTrail::Trail
+    Properties: 
+      EnableLogFileValidation: true
+      IsLogging: true
+      IsMultiRegionTrail: true
+      IsOrganizationTrail: true
+      IncludeGlobalServiceEvents: true
+      S3BucketName: !Ref CloudTrailBucket
+      TrailName: !Ref trailName
+      # KMSKeyId: !Ref GlobalCloudtrailKMSKeyAlias
+
+  # # the alias allows us to more easily identity the key 
+  # GlobalCloudtrailKMSKeyAlias:
+  #   DeletionPolicy: Retain
+  #   UpdateReplacePolicy: Retain
+  #   Type: AWS::KMS::Alias
+  #   Properties: 
+  #     AliasName: !Sub "alias/${trailName}"
+  #     TargetKeyId: !Ref GlobalCloudtrailKMSKey
+
+  # # based on https://docs.aws.amazon.com/awscloudtrail/latest/userguide/encrypting-cloudtrail-log-files-with-aws-kms.html
+  # GlobalCloudtrailKMSKey:
+  #   DeletionPolicy: Retain
+  #   UpdateReplacePolicy: Retain
+  #   Type: AWS::KMS::Key
+  #   Properties: 
+  #     Description: "KMS key used to encrypt CloudTrail events"
+  #     EnableKeyRotation: true
+  #     KeyPolicy:
+  #       Version: "2012-10-17"
+  #       Id: "cloudtrail-policy"
+  #       Statement:
+  #       - Sid: "Account as administrator"
+  #         Effect: Allow
+  #         Principal:
+  #           AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+  #         Action: ["kms:Create*","kms:Describe*","kms:Enable*","kms:List*","kms:Put*","kms:Update*","kms:Revoke*","kms:Disable*","kms:Get*","kms:Delete*","kms:ScheduleKeyDeletion","kms:CancelKeyDeletion", "kms:*TagResource"]
+  #         Resource: "*"
+  #       - Sid: Allow CloudTrail to encrypt logs
+  #         Effect: Allow
+  #         Principal:
+  #           Service: cloudtrail.amazonaws.com
+  #         Action: kms:GenerateDataKey*
+  #         Resource: "*"
+  #         Condition:
+  #           StringLike:
+  #             kms:EncryptionContext:aws:cloudtrail:arn:
+  #             - !Sub "arn:aws:cloudtrail:*:${AWS::AccountId}:trail/*"
+  #           StringEquals:
+  #             aws:SourceArn: !Sub "arn:aws:cloudtrail:${AWS::Region}:${AWS::AccountId}:trail/${trailName}"

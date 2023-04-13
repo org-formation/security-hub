@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  delegatedAccount:
+    Type: String
+
+Resources:
+
+  GuardDutyServiceAccess:
+    Type: Community::Organizations::EnableAWSServiceAccess
+    Properties:
+      ServicePrincipal: guardduty.amazonaws.com
+      ResourceId: guardduty
+
+  GuardDutyDelegatedAdmin:
+    Type: Community::Organizations::DelegatedAdmin
+    DependsOn: GuardDutyServiceAccess
+    Properties:
+      ServicePrincipal: guardduty.amazonaws.com
+      AccountId: !Ref delegatedAccount

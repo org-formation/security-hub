@@ -1,0 +1,24 @@
+Parameters:
+  <<: !Include "../../organization-parameters.yml"
+
+#####
+## Community Organizations Types
+#####
+
+OrganizationsDelegatedAdminRP:
+  Type: register-type
+  SchemaHandlerPackage: s3://community-resource-provider-catalog/community-organizations-delegatedadmin-0.1.0.zip
+  ResourceType: "Community::Organizations::DelegatedAdmin"
+  MaxConcurrentTasks: 500
+  OrganizationBinding:
+    IncludeMasterAccount: true
+    Region: us-east-1 # Organization policies are only ever compatible with us-east-1
+
+OrganizationsEnableAWSServiceRP:
+  Type: register-type
+  SchemaHandlerPackage: s3://community-resource-provider-catalog/community-organizations-enableawsserviceaccess-0.1.0.zip
+  ResourceType: "Community::Organizations::EnableAWSServiceAccess"
+  MaxConcurrentTasks: 500
+  OrganizationBinding:
+    IncludeMasterAccount: true
+    Region: us-east-1 # Organization policies are only ever compatible with us-east-1

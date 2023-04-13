@@ -1,0 +1,61 @@
+Parameters:
+  <<: !Include "../../organization-parameters.yml"
+  
+OrganizationsDelegate:
+  Type: update-stacks
+  Template: ./organizations-delegate.yml
+  StackName: security-hub-organizations-delegate
+  StackDescription: !Sub "300-security-hub: Delegates administration for Security Hub to account ${SecurityAccount}"
+  Parameters:
+    delegatedAccount: !Ref SecurityAccount
+  DefaultOrganizationBindingRegion: us-east-1
+  DefaultOrganizationBinding:
+    IncludeMasterAccount: true
+
+SecurityHub:
+  Type: update-stacks
+  Template: ./security-hub.yml
+  StackName: security-hub
+  StackDescription: "300-security-hub: sets up security hub and finding aggregation across the org"
+  OrganizationBindings:
+    OrganizationsServiceBinding:
+      IncludeMasterAccount: true
+      Region: us-east-1
+    AllBinding:
+      IncludeMasterAccount: true
+      Account: "*"
+      Region: !Ref allRegions
+    PrimaryRegionBinding:
+      IncludeMasterAccount: true
+      Account: "*"
+      Region: !Ref primaryRegion
+  Parameters:
+    aggregationRegions: !Ref nonPrimaryRegions
+
+SecurityHubControls:
+  Type: update-stacks
+  DependsOn: [SecurityHub]
+  Template: ./security-hub-controls.yml
+  StackName: security-hub-controls
+  StackDescription: "300-security-hub: disables controls that don't apply and records justifications for doing so"
+  OrganizationBindings:
+    AllExceptLoggingAccountPrimaryRegion:
+      IncludeMasterAccount: true
+      Account: "*" 
+      ExcludeAccount: !Ref LogArchiveAccount
+      Region: !Ref primaryRegion
+    AllAccountsAllRegions:
+      IncludeMasterAccount: true
+      Account: "*"
+      Region: !Ref allRegions
+
+SecurityHubInsights:
+  Type: update-stacks
+  DependsOn: [SecurityHub]
+  Template: ./security-hub-insights.yml
+  StackName: security-hub-insights
+  StackDescription: "300-security-hub: creates security hub insights for reporting over security hub findings"
+  DefaultOrganizationBindingRegion: !Ref primaryRegion
+  DefaultOrganizationBinding:
+    Account: !Ref SecurityAccount
+  
