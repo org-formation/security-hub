@@ -4,7 +4,7 @@ Parameters:
 AnnotateOrganization:
   Type: annotate-organization
   DefaultOrganizationAccessRoleName: OrganizationAccountAccessRole
-  # ExcludeAccounts: ["112233445566", "223344556677"], accounts that are excluded will not be modified
+  ExcludeAccounts: !Ref excludedAccounts
   AccountMapping:
     SecurityAccount: !Ref securityAccountId
     LogArchiveAccount: !Ref logArchiveAccountId

@@ -4,6 +4,10 @@
 #### Organization Structure
 ###################
 
+excludedAccounts:
+  Type: List<String>
+  Default: []
+
 securityAccountId:
   Type: String
   Default: "123412341234"
