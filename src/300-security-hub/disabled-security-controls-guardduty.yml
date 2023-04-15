@@ -1,0 +1,153 @@
+OrganizationBindings:
+  AllAccountsAllRegions:
+
+# for a reference on which controls make sense to disable: https://docs.aws.amazon.com/securityhub/latest/userguide/controls-to-disable.html
+
+Resources:
+
+  #######
+  ### Controls that deal with CloudWatch alarms
+  ####### 
+
+  # If you prefer to use Amazon GuardDuty for anomaly detection instead of Amazon CloudWatch alarms, 
+  # you can disable these controls, which focus on CloudWatch alarms.
+  
+  # [CloudWatch.1] A log metric filter and alarm should exist for usage of the "root" user
+  SecurityControlCloudWatch1:
+    Type: Community::SecurityHub::SecurityControl
+    OrganizationBinding: !Ref AllAccountsAllRegions
+    Properties:
+      ControlId: CloudWatch.1
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled as GuardDuty is used instead.
+
+  # [CloudWatch.2] Ensure a log metric filter and alarm exist for unauthorized API calls
+  SecurityControlCloudWatch2:
+    Type: Community::SecurityHub::SecurityControl
+    OrganizationBinding: !Ref AllAccountsAllRegions
+    DependsOn: SecurityControlCloudWatch1
+    Properties:
+      ControlId: CloudWatch.2
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled as GuardDuty is used instead.
+
+  # [CloudWatch.3] Ensure a log metric filter and alarm exist for Management Console sign-in without MFA
+  SecurityControlCloudWatch3:
+    Type: Community::SecurityHub::SecurityControl
+    OrganizationBinding: !Ref AllAccountsAllRegions
+    DependsOn: SecurityControlCloudWatch2
+    Properties:
+      ControlId: CloudWatch.3
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled as GuardDuty is used instead.
+
+  # [CloudWatch.4] Ensure a log metric filter and alarm exist for IAM policy changes
+  SecurityControlCloudWatch4:
+    Type: Community::SecurityHub::SecurityControl
+    OrganizationBinding: !Ref AllAccountsAllRegions
+    DependsOn: SecurityControlCloudWatch3
+    Properties:
+      ControlId: CloudWatch.4
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled as GuardDuty is used instead.
+
+  # [CloudWatch.5] Ensure a log metric filter and alarm exist for CloudTrail AWS Configuration changes
+  SecurityControlCloudWatch5:
+    Type: Community::SecurityHub::SecurityControl
+    OrganizationBinding: !Ref AllAccountsAllRegions
+    DependsOn: SecurityControlCloudWatch4
+    Properties:
+      ControlId: CloudWatch.5
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled as GuardDuty is used instead.
+
+  # [CloudWatch.6] Ensure a log metric filter and alarm exist for AWS Management Console authentication failures
+  SecurityControlCloudWatch6:
+    Type: Community::SecurityHub::SecurityControl
+    OrganizationBinding: !Ref AllAccountsAllRegions
+    DependsOn: SecurityControlCloudWatch5
+    Properties:
+      ControlId: CloudWatch.6
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled as GuardDuty is used instead.
+
+  # [CloudWatch.7] Ensure a log metric filter and alarm exist for disabling or scheduled deletion of customer managed keys
+  SecurityControlCloudWatch7:
+    Type: Community::SecurityHub::SecurityControl
+    OrganizationBinding: !Ref AllAccountsAllRegions
+    DependsOn: SecurityControlCloudWatch6
+    Properties:
+      ControlId: CloudWatch.7
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled as GuardDuty is used instead.
+
+  # [CloudWatch.8] Ensure a log metric filter and alarm exist for S3 bucket policy changes
+  SecurityControlCloudWatch8:
+    Type: Community::SecurityHub::SecurityControl
+    OrganizationBinding: !Ref AllAccountsAllRegions
+    DependsOn: SecurityControlCloudWatch7
+    Properties:
+      ControlId: CloudWatch.8
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled as GuardDuty is used instead.
+
+  # [CloudWatch.9] Ensure a log metric filter and alarm exist for AWS Config configuration changes
+  SecurityControlCloudWatch9:
+    Type: Community::SecurityHub::SecurityControl
+    OrganizationBinding: !Ref AllAccountsAllRegions
+    DependsOn: SecurityControlCloudWatch8
+    Properties:
+      ControlId: CloudWatch.9
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled as GuardDuty is used instead.
+
+  # [CloudWatch.10] Ensure a log metric filter and alarm exist for security group changes
+  SecurityControlCloudWatch10:
+    Type: Community::SecurityHub::SecurityControl
+    OrganizationBinding: !Ref AllAccountsAllRegions
+    DependsOn: SecurityControlCloudWatch9
+    Properties:
+      ControlId: CloudWatch.10
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled as GuardDuty is used instead.
+
+  # [CloudWatch.11] Ensure a log metric filter and alarm exist for changes to Network Access Control Lists (NACL)
+  SecurityControlCloudWatch11:
+    Type: Community::SecurityHub::SecurityControl
+    OrganizationBinding: !Ref AllAccountsAllRegions
+    DependsOn: SecurityControlCloudWatch10
+    Properties:
+      ControlId: CloudWatch.11
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled as GuardDuty is used instead.
+
+  # [CloudWatch.12] Ensure a log metric filter and alarm exist for changes to network gateways
+  SecurityControlCloudWatch12:
+    Type: Community::SecurityHub::SecurityControl
+    OrganizationBinding: !Ref AllAccountsAllRegions
+    DependsOn: SecurityControlCloudWatch11
+    Properties:
+      ControlId: CloudWatch.12
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled as GuardDuty is used instead.
+
+  # [CloudWatch.13] Ensure a log metric filter and alarm exist for route table changes
+  SecurityControlCloudWatch13:
+    Type: Community::SecurityHub::SecurityControl
+    OrganizationBinding: !Ref AllAccountsAllRegions
+    DependsOn: SecurityControlCloudWatch12
+    Properties:
+      ControlId: CloudWatch.13
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled as GuardDuty is used instead.
+
+  # [CloudWatch.14] Ensure a log metric filter and alarm exist for VPC changesSecurityControlCloudWatch1:
+  SecurityControlCloudWatch14:
+    Type: Community::SecurityHub::SecurityControl
+    OrganizationBinding: !Ref AllAccountsAllRegions
+    Properties:
+    DependsOn: SecurityControlCloudWatch13
+      ControlId: CloudWatch.14
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled as GuardDuty is used instead.
+

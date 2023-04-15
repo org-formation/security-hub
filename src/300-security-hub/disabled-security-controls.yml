@@ -1,0 +1,277 @@
+OrganizationBindings:
+  AllAccountsNonDefaultRegions: {}
+  AllExceptLoggingAccountPrimaryRegion: {}
+
+# for a reference on which controls make sense to disable: https://docs.aws.amazon.com/securityhub/latest/userguide/controls-to-disable.html
+
+Resources:
+
+
+  #######
+  ### Controls that deal with CloudTrail logging
+  ####### 
+
+  # This control deals with using AWS Key Management Service (AWS KMS) to encrypt AWS CloudTrail trail logs. 
+  # If you log these trails in a centralized logging account, you only need to enable this control in the account 
+  # and Region where centralized logging takes place.
+
+  # [CloudTrail.2] CloudTrail should have encryption at-rest enabled
+  SecurityControlCloudTrail2:
+    OrganizationBinding: !Ref AllExceptLoggingAccountPrimaryRegion
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: CloudTrail.2
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled outside the primary region in the logging account as it results in false positives
+
+  #######
+  ### Controls that deal with global resources
+  ####### 
+
+  # To save on the cost of AWS Config, you can disable recording of global resources in all but one AWS Region. 
+  # After you do this, AWS Security Hub will still run security checks in all Regions where controls are enabled 
+  # and will charge you based on the number of checks per account per Region. Accordingly, to save on the cost of Security Hub, 
+  # disable the following controls that deal with global resources in all Regions except the Region that records global resources.
+  #
+  # If you disable these controls and disable recording of global resources in particular Regions,
+  # you should also disable [Config.1] AWS Config should be enabled in those Regions. 
+  # This is because Config.1 requires recording of global resources in order to pass.
+
+  # [IAM.1] IAM policies should not allow full "*" administrative privileges
+  SecurityControlIAM1:
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.1
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.2] IAM users should not have IAM policies attached
+  SecurityControlIAM2:
+    DependsOn: SecurityControlIAM1
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.2
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.3] IAM users' access keys should be rotated every 90 days or less
+  SecurityControlIAM3:
+    DependsOn: SecurityControlIAM2
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.3
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.4] IAM root user access key should not exist
+  SecurityControlIAM4:
+    DependsOn: SecurityControlIAM3
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.4
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.5] MFA should be enabled for all IAM users that have a console password
+  SecurityControlIAM5:
+    DependsOn: SecurityControlIAM4
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.5
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.6] Hardware MFA should be enabled for the root user
+  SecurityControlIAM6:
+    DependsOn: SecurityControlIAM5
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.6
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.7] Password policies for IAM users should have strong AWS Configurations
+  SecurityControlIAM7:
+    DependsOn: SecurityControlIAM6
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.7
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.8] Unused IAM user credentials should be removed
+  SecurityControlIAM8:
+    DependsOn: SecurityControlIAM7
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.8
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.9] Virtual MFA should be enabled for the root user
+  SecurityControlIAM9:
+    DependsOn: SecurityControlIAM8
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.9
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.10] Password policies for IAM users should have strong AWS Configurations
+  SecurityControlIAM10:
+    DependsOn: SecurityControlIAM9
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.10
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.11] Ensure IAM password policy requires at least one uppercase letter
+  SecurityControlIAM11:
+    DependsOn: SecurityControlIAM10
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.11
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.12] Ensure IAM password policy requires at least one lowercase letter
+  SecurityControlIAM12:
+    DependsOn: SecurityControlIAM11
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.12
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.13] Ensure IAM password policy requires at least one symbol
+  SecurityControlIAM13:
+    DependsOn: SecurityControlIAM12
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.13
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.14] Ensure IAM password policy requires at least one number
+  SecurityControlIAM14:
+    DependsOn: SecurityControlIAM13
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.14
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.15] Ensure IAM password policy requires minimum password length of 14 or greater
+  SecurityControlIAM15:
+    DependsOn: SecurityControlIAM14
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.15
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.16] Ensure IAM password policy prevents password reuse
+  SecurityControlIAM16:
+    DependsOn: SecurityControlIAM15
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.16
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.17] Ensure IAM password policy expires passwords within 90 days or less
+  SecurityControlIAM17:
+    DependsOn: SecurityControlIAM16
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.17
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.18] Ensure a support role has been created to manage incidents with AWS Support
+  SecurityControlIAM18:
+    DependsOn: SecurityControlIAM17
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.18
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.19] MFA should be enabled for all IAM users
+  SecurityControlIAM19:
+    DependsOn: SecurityControlIAM18
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.19
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.20] Avoid the use of the root user
+  SecurityControlIAM20:
+    DependsOn: SecurityControlIAM19
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.20
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.21] IAM customer managed policies that you create should not allow wildcard actions for services
+  SecurityControlIAM21:
+    DependsOn: SecurityControlIAM20
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.21
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [IAM.22] IAM user credentials unused for 45 days should be removed
+  SecurityControlIAM22:
+    DependsOn: SecurityControlIAM21
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: IAM.22
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [KMS.1] IAM customer managed policies should not allow decryption actions on all KMS keys
+  SecurityControlKMS1:
+    DependsOn: SecurityControlIAM22
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: KMS.1
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.
+
+  # [KMS.2] IAM principals should not have IAM inline policies that allow decryption actions on all KMS keys
+  SecurityControlKMS2:
+    DependsOn: SecurityControlKMS1
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: KMS.2
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions as it checks against global resources.

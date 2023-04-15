@@ -35,15 +35,31 @@ SecurityHub:
 SecurityHubControls:
   Type: update-stacks
   DependsOn: [SecurityHub]
-  Template: ./security-hub-controls.yml
-  StackName: security-hub-controls
-  StackDescription: "300-security-hub: disables controls that don't apply and records justifications for doing so"
+  Template: ./disabled-security-controls.yml
+  StackName: disabled-security-controls
+  StackDescription: "300-security-hub: disables controls that are either superfluous or lead to false positives"
+  # MaxConcurrentStacks: 2 # the underlying APIs are known to throttle under moderate load
+  # DisableStackRollbacks: true
   OrganizationBindings:
     AllExceptLoggingAccountPrimaryRegion:
       IncludeMasterAccount: true
       Account: "*" 
       ExcludeAccount: !Ref LogArchiveAccount
       Region: !Ref primaryRegion
+    AllAccountsNonDefaultRegions:
+      IncludeMasterAccount: true
+      Account: "*"
+      Region: !Ref nonPrimaryRegions
+
+SecurityHubControlsGuardDuty:
+  Type: update-stacks
+  DependsOn: [SecurityHub]
+  Template: ./disabled-security-controls-guardduty.yml
+  StackName: disabled-security-controls-guardduty
+  StackDescription: "300-security-hub: disables controls that can de disabled if GuardDuty is enabled"
+  # MaxConcurrentStacks: 2 # the underlying APIs are known to throttle under moderate load
+  # DisableStackRollbacks: true
+  OrganizationBindings:
     AllAccountsAllRegions:
       IncludeMasterAccount: true
       Account: "*"

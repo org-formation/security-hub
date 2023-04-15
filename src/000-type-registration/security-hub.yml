@@ -5,10 +5,10 @@ Parameters:
 ## Community Security Hub Types
 #####
 
-CommunityStandardsControl:
+CommunitySecurityControl:
   Type: register-type
-  SchemaHandlerPackage: s3://community-resource-provider-catalog/community-securityhub-standardscontrol-0.2.5.zip
-  ResourceType: 'Community::SecurityHub::StandardsControl'
+  SchemaHandlerPackage: s3://community-resource-provider-catalog/community-securityhub-securitycontrol-0.2.6.zip
+  ResourceType: 'Community::SecurityHub::SecurityControl'
   MaxConcurrentTasks: 500
   OrganizationBinding:
     Region: !Ref allRegions
@@ -18,7 +18,7 @@ CommunityStandardsControl:
 # the standards control allows you to specify which standards to enable
 SecurityHubStandards:
   Type: register-type
-  SchemaHandlerPackage: s3://community-resource-provider-catalog/community-securityhub-standards-0.1.4.zip
+  SchemaHandlerPackage: s3://community-resource-provider-catalog/community-securityhub-standards-0.1.5.zip
   ResourceType: 'Community::SecurityHub::Standards'
   MaxConcurrentTasks: 500
   OrganizationBinding:

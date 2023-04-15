@@ -25,6 +25,7 @@ Resources:
       AFSBP: ENABLED
       CIS12: DISABLED
       PCIDSS: DISABLED
+      NIST: DISABLED
 
   FindingAggregation:
     Type: Community::SecurityHub::FindingAggregation
