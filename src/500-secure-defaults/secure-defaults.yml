@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  skipAccountWidePublicAccessBlock:
+    Type: String
+    Default: true
+
+
+Conditions:
+  DeployAccountWidePublicAccessBlock: !Equals ["false", !Ref skipAccountWidePublicAccessBlock]
+
+# Section that contains a named list of Bindings.
+# Bindings determine what resources are deployed where
+# These bindings can be !Ref'd from the Resources in the resource section
+OrganizationBindings:
+  # Binding for: S3AccountPublicAccessBlock
+  PrimaryRegionBinding:
+
+  # Binding for: EbsEncryptionDefaults
+  AllRegionsBinding:
+
+Resources:
+  S3AccountPublicAccessBlock:
+    Condition: DeployAccountWidePublicAccessBlock
+    Type: "Community::S3::PublicAccessBlock"
+    OrganizationBinding: !Ref PrimaryRegionBinding
+    Properties:
+      BlockPublicAcls: true
+      BlockPublicPolicy: true
+      IgnorePublicAcls: true
+      RestrictPublicBuckets: true
+
+  EbsEncryptionDefaults:
+    Type: "Community::Organizations::EbsEncryptionDefaults"
+    OrganizationBinding: !Ref AllRegionsBinding
+    Properties:
+      EnableEbsEncryptionByDefault: true
+
+  NoDefaultVPC:
+    OrganizationBinding: !Ref AllRegionsBinding
+    Type: Community::Organizations::NoDefaultVPC
+
+
+      

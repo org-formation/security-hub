@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: "2010-09-09-OC"
+Parameters:
+  operationsContactName:
+    Type: String
+  operationsContactEmail:
+    Type: String
+  operationsContactTitle:
+    Type: String
+  operationsContactPhoneNumber:
+    Type: String
+  billingContactName:
+    Type: String
+  billingContactEmail:
+    Type: String
+  billingContactTitle:
+    Type: String
+  billingContactPhoneNumber:
+    Type: String
+  securityContactName:
+    Type: String
+  securityContactEmail:
+    Type: String
+  securityContactTitle:
+    Type: String
+  securityContactPhoneNumber:
+    Type: String
+
+Resources:
+  OperationsContact:
+    Type: Community::Account::AlternateContact
+    Properties:
+        AlternateContactType: OPERATIONS
+        Name: !Ref operationsContactName
+        EmailAddress: !Ref operationsContactEmail
+        Title: !Ref operationsContactTitle
+        PhoneNumber: !Ref operationsContactPhoneNumber
+    
+  BillingContact:
+    Type: Community::Account::AlternateContact
+    Properties:
+        AlternateContactType: BILLING
+        Name: !Ref billingContactName
+        EmailAddress: !Ref billingContactEmail
+        Title: !Ref billingContactTitle
+        PhoneNumber: !Ref billingContactPhoneNumber
+
+  SecurityContact:
+    Type: Community::Account::AlternateContact
+    Properties:
+        AlternateContactType: SECURITY
+        Name: !Ref securityContactName
+        EmailAddress: !Ref securityContactEmail
+        Title: !Ref securityContactTitle
+        PhoneNumber: !Ref securityContactPhoneNumber

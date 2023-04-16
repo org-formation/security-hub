@@ -1,4 +1,12 @@
 
+SkipAccountWidePublicAccessBlock:
+  Type: String
+  Default: true
+
+SkipAlternateContacts:
+  Type: String
+  Default: true
+
 
 ###################
 #### Organization Structure

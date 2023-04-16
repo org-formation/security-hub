@@ -16,6 +16,7 @@ GuardDuty:
   Type: update-stacks
   Template: ./guardduty.yml
   DependsOn: OrganizationsDelegate
+  StackDescription: "400-guardduty: Enables Guardduty for the entire org"
   StackName: guardduty
   DefaultOrganizationBindingRegion: us-east-1
   OrganizationBindings:
@@ -30,4 +31,16 @@ GuardDuty:
       Region: !Ref allRegions
     GuardDutyMasterBinding:
       Account: !Ref SecurityAccount
+      Region: !Ref allRegions
+
+SecurityHubControlsGuardDuty:
+  Type: update-stacks
+  DependsOn: [GuardDuty]
+  Template: ./disabled-security-controls.yml
+  StackName: guardduty-disabled-security-controls
+  StackDescription: "400-guardduty: disables controls that can de disabled if GuardDuty is enabled"
+  OrganizationBindings:
+    AllAccountsAllRegions:
+      IncludeMasterAccount: true
+      Account: "*"
       Region: !Ref allRegions

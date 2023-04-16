@@ -10,3 +10,7 @@ SecurityHubTypes:
 SecureDefaultTypes:
   Type: include
   Path: secure-defaults.yml
+
+AccountTypes:
+  Type: include
+  Path: account.yml

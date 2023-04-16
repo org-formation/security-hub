@@ -1,0 +1,12 @@
+Parameters:
+  <<: !Include "../../organization-parameters.yml"
+
+CommunityAlternateContactsRP:
+  Type: register-type
+  SchemaHandlerPackage: s3://community-resource-provider-catalog/community-account-alternatecontact-0.1.0.zip
+  ResourceType: 'Community::Account::AlternateContact'
+  MaxConcurrentTasks: 500
+  OrganizationBinding:
+    Region: !Ref primaryRegion
+    Account: "*"
+    IncludeMasterAccount: true

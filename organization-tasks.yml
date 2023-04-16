@@ -28,5 +28,11 @@ SecurityHub:
   Path: src/300-security-hub/organization-tasks.yml
 
 GuardDuty:
+  DependsOn: [SecurityHub]
   Type: include
   Path: src/400-guardduty/organization-tasks.yml
+
+SecureDefaults:
+  DependsOn: [TypeRegistrations]
+  Type: include
+  Path: src/500-secure-defaults/organization-tasks.yml

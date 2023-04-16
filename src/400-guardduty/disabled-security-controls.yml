@@ -145,8 +145,8 @@ Resources:
   SecurityControlCloudWatch14:
     Type: Community::SecurityHub::SecurityControl
     OrganizationBinding: !Ref AllAccountsAllRegions
-    Properties:
     DependsOn: SecurityControlCloudWatch13
+    Properties:
       ControlId: CloudWatch.14
       ControlStatus: DISABLED
       DisabledReason: This control is disabled as GuardDuty is used instead.

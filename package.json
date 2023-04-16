@@ -4,15 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "print-tasks": "npx org-formation print-tasks organization-tasks.yml --output yaml --max-concurrent-stacks 250 --max-concurrent-tasks 100",
-    "validate-tasks": "npx org-formation validate-tasks organization-tasks.yml --failed-tasks-tolerance 0 --max-concurrent-stacks 250 --max-concurrent-tasks 100",
+    "check-prerequisites": "ts-node prerequisites/checks.ts",
+    "print-tasks": "npm run check-prerequisites && npx org-formation print-tasks organization-tasks.yml --output yaml --max-concurrent-stacks 250 --max-concurrent-tasks 100",
+    "validate-tasks": "npm run check-prerequisites && npx org-formation validate-tasks organization-tasks.yml --failed-tasks-tolerance 0 --max-concurrent-stacks 250 --max-concurrent-tasks 100",
     "cfn-lint": "[ ! -d './.printed-stacks' ] || echo 'us-east-1' | xargs -P 16 -I % cfn-lint \"./.printed-stacks/**/%*.yaml\"  -i W2001,E3001,E1019,W1020,W2509,E3021,E1010",
-    "perform-tasks": "npx org-formation perform-tasks ./organization-tasks.yml --no-color --perform-cleanup --max-concurrent-stacks 250 --max-concurrent-tasks 100",
+    "perform-tasks": "npm run check-prerequisites && npx org-formation perform-tasks ./organization-tasks.yml --no-color --perform-cleanup --max-concurrent-stacks 250 --max-concurrent-tasks 100",
     "perform-tasks:local": "npm run perform-tasks -- --skip-storing-state"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-organization-formation": "^1.0.10-beta.1"
+    "@aws-sdk/client-organizations": "^3.312.0",
+    "@aws-sdk/client-sts": "^3.312.0",
+    "aws-organization-formation": "^1.0.10-beta.1",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.5"
   }
 }
