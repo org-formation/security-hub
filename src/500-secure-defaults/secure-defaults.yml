@@ -40,5 +40,14 @@ Resources:
     OrganizationBinding: !Ref AllRegionsBinding
     Type: Community::Organizations::NoDefaultVPC
 
-
+  PasswordPolicy:
+    Type: Community::IAM::PasswordPolicy
+    OrganizationBinding: !Ref PrimaryRegionBinding
+    Properties:
+      MinimumPasswordLength: 8
+      RequireLowercaseCharacters: true
+      RequireNumbers: true
+      RequireSymbols: false
+      RequireUppercaseCharacters: false
+      AllowUsersToChangePassword: true
       
