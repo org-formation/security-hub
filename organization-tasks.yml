@@ -16,6 +16,7 @@ TypeRegistrations:
 
 CloudTrail:
   Type: include
+  Skip: true
   Path: src/100-cloudtrail/organization-tasks.yml
 
 AwsConfig:

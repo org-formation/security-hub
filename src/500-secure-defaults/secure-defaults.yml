@@ -44,7 +44,7 @@ Resources:
     Type: Community::IAM::PasswordPolicy
     OrganizationBinding: !Ref PrimaryRegionBinding
     Properties:
-      MinimumPasswordLength: 8
+      MinimumPasswordLength: 14
       RequireLowercaseCharacters: true
       RequireNumbers: true
       RequireSymbols: false

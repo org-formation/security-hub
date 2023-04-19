@@ -14,15 +14,15 @@ SkipAlternateContacts:
 
 excludedAccounts:
   Type: List<String>
-  Default: []
+  Default: ["362239514602", "673026687213"]
 
 securityAccountId:
   Type: String
-  Default: "123412341234"
+  Default: "152091636325"
 
 logArchiveAccountId:
   Type: String
-  Default: "123412341234"
+  Default: "228071492591"
 
 primaryRegion:
   Type: String
@@ -42,7 +42,6 @@ nonPrimaryRegions:
 ###################
 #### Security Hub Configuration
 ###################
-
 
 
 ###################
