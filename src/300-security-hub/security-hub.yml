@@ -26,6 +26,23 @@ Resources:
       CIS12: DISABLED
       PCIDSS: DISABLED
       NIST: DISABLED
+      
+  # deploy all member connections to the master account
+  Members:
+    Type: "Community::SecurityHub::Members"
+    DependsOn: Hub
+    OrganizationBinding: !Ref ManagementAccountBinding
+    Properties:
+      MemberAccountIDs: Fn::EnumTargetAccounts MembersBinding ${account}
+
+  # deploy the master connection to all member accounts
+  Master:
+    Type: "Community::SecurityHub::Master"
+    DependsOn: Hub
+    DependsOnAccount: !Ref SecurityAccount
+    OrganizationBinding: !Ref MembersBinding
+    Properties:
+      MasterAccountId: !Ref SecurityAccount
 
   FindingAggregation:
     Type: Community::SecurityHub::FindingAggregation

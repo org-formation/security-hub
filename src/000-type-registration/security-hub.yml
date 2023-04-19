@@ -56,3 +56,23 @@ SecurityHubMemberInsight:
     Region: !Ref allRegions
     Account: "*"
     IncludeMasterAccount: true
+
+SecurityHubMasterRP:
+  Type: register-type
+  SchemaHandlerPackage: s3://community-resource-provider-catalog/community-securityhub-master-0.2.1.zip
+  ResourceType: 'Community::SecurityHub::Master'
+  MaxConcurrentTasks: 500
+  OrganizationBinding:
+    Region: !Ref allRegions
+    Account: "*"
+    IncludeMasterAccount: true
+
+SecurityHubMemberRP:
+  Type: register-type
+  SchemaHandlerPackage: s3://community-resource-provider-catalog/community-securityhub-members-0.2.3.zip
+  ResourceType: 'Community::SecurityHub::Members'
+  MaxConcurrentTasks: 500
+  OrganizationBinding:
+    Region: !Ref allRegions
+    Account: "*"
+    IncludeMasterAccount: true

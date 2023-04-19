@@ -18,9 +18,6 @@ SecurityHub:
   StackName: security-hub
   StackDescription: "300-security-hub: sets up security hub and finding aggregation across the org"
   OrganizationBindings:
-    OrganizationsServiceBinding:
-      IncludeMasterAccount: true
-      Region: us-east-1
     AllBinding:
       IncludeMasterAccount: true
       Account: "*"
@@ -29,6 +26,14 @@ SecurityHub:
       IncludeMasterAccount: true
       Account: "*"
       Region: !Ref primaryRegion
+    ManagementAccountBinding: 
+      Account: !Ref SecurityAccount
+      Region: !Ref allRegions
+    MembersBinding: 
+      IncludeMasterAccount: true
+      Account: "*"
+      Region: !Ref allRegions
+      ExcludeAccount: !Ref SecurityAccount
   Parameters:
     aggregationRegions: !Ref nonPrimaryRegions
 
