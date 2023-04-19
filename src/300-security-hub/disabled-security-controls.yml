@@ -37,8 +37,19 @@ Resources:
   # you should also disable [Config.1] AWS Config should be enabled in those Regions. 
   # This is because Config.1 requires recording of global resources in order to pass.
 
+
+  # [Config.1] IAM policies should not allow full "*" administrative privileges
+  SecurityControlConfig1:
+    OrganizationBinding: !Ref AllAccountsNonDefaultRegions
+    Type: Community::SecurityHub::SecurityControl
+    Properties:
+      ControlId: Config.1
+      ControlStatus: DISABLED
+      DisabledReason: This control is disabled in non-primary aws regions where recording global resources is disabled
+
   # [IAM.1] IAM policies should not allow full "*" administrative privileges
   SecurityControlIAM1:
+    DependsOn: SecurityControlConfig1
     OrganizationBinding: !Ref AllAccountsNonDefaultRegions
     Type: Community::SecurityHub::SecurityControl
     Properties:
