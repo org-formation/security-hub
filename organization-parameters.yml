@@ -1,39 +1,39 @@
 
-SkipAccountWidePublicAccessBlock:
-  Type: String
-  Default: true
-
-SkipAlternateContacts:
-  Type: String
-  Default: true
-
 
 ###################
 #### Organization Structure
 ###################
 
+# you can exclude accounts from being deployed to by adding them to this list
 excludedAccounts:
   Type: List<String>
-  Default: ["362239514602", "673026687213"]
+  Default: [] # example: ["123412341234", "123412341234"]
 
+# replace the value below with the AWS Account Id within your organization that should contain all the security related tooling.
+# this is an account where you do want people to log into and review their AWS Accounts security posture
 securityAccountId:
   Type: String
-  Default: "152091636325"
+  Default: "123412341234"
 
+# replace the value below with the AWS Account Id within your organization that should be used as to archive (security related) logs.
+# this is typically a separate account that you do not want people to frequently log into as the logs might contain privacy sensitive information
 logArchiveAccountId:
   Type: String
-  Default: "228071492591"
+  Default: "123412341234"
 
+# this is region you use as your primary region
 primaryRegion:
   Type: String
   Default: us-east-1
 
+# this is a list of all regions you use (including your primary region)
 allRegions:
   Type: String
   Default:
     - us-east-1
     - eu-central-1
 
+# this is a list of all regions you use (except your primary region)
 nonPrimaryRegions:
   Type: String
   Default:
@@ -42,6 +42,19 @@ nonPrimaryRegions:
 ###################
 #### Security Hub Configuration
 ###################
+
+# When set to false, this quickstart will deploy an account-wide Public Access Block to ensure no S3 buckets can be made public
+# The default is true as this will/might inadvertently deny access to any purposefully public buckets
+# Prior to setting this to false, ensure you do not have any S3 buckets that should be publicly accessible
+SkipAccountWidePublicAccessBlock:
+  Type: String
+  Default: true # change to false to ensure no S3 buckets can publicly be accessed
+
+# When set to false, the quickstart will configure alternate contact details in all of your AWS acounts.
+# Prior to setting this to false, review the Account Contact Details section below
+SkipAlternateContacts:
+  Type: String
+  Default: true
 
 
 ###################
